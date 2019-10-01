@@ -31,7 +31,9 @@ import one.oktw.galaxy.command.CommandRegister
 import one.oktw.galaxy.event.EventManager
 import one.oktw.galaxy.player.Harvest
 import one.oktw.galaxy.player.PlayerControl
+import one.oktw.galaxy.proxy.api.ProxyAPI
 import one.oktw.galaxy.resourcepack.ResourcePack
+import java.util.*
 
 @Suppress("unused")
 class Main : ModInitializer {
@@ -44,6 +46,13 @@ class Main : ModInitializer {
         val PROXY_IDENTIFIER = Identifier("galaxy", "proxy")
         var main: Main? = null
             private set
+        val selfUID by lazy {
+            try {
+                System.getenv("GALAXY_ID")?.let { UUID.fromString(it) }
+            } catch (err: Throwable) {
+                null
+            } ?: ProxyAPI.dummyUUID
+        }
     }
 
     override fun onInitialize() {
@@ -65,5 +74,7 @@ class Main : ModInitializer {
         eventManager.register(Exchange())
         eventManager.register(PlayerControl())
         eventManager.register(Harvest())
+
+        server.log("current server id is $selfUID")
     }
 }
