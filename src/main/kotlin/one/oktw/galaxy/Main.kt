@@ -75,6 +75,7 @@ class Main : ModInitializer {
         eventManager.register(PlayerControl())
         eventManager.register(Harvest())
 
-        server.log("current server id is $selfUID")
+        // server.log("current server id is $selfUID")
+        println("current server id is $selfUID")
     }
 }
