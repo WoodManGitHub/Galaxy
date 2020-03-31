@@ -27,13 +27,13 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.time.delay
-import net.minecraft.client.network.packet.CustomPayloadS2CPacket
 import net.minecraft.command.arguments.GameProfileArgumentType
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
-import net.minecraft.util.PacketByteBuf
 import one.oktw.galaxy.Main.Companion.PROXY_IDENTIFIER
 import one.oktw.galaxy.Main.Companion.main
 import one.oktw.galaxy.command.Command

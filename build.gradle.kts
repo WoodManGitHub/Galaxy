@@ -9,19 +9,13 @@ plugins {
 val version = "0.0.1"
 val group = "one.oktw"
 
-val fabricVersion = "0.1.2+b7f9825de8"
+val fabricVersion = "0.1.2+b7f9825d30"
 val proxyApiVersion = "0.1.0"
 
 repositories {
     mavenCentral()
     jcenter()
     maven(url = "https://jitpack.io")
-    maven(url = "https://maven.fabricmc.net/") {
-        name = "Fabric"
-    }
-    maven(url = "https://kotlin.bintray.com/kotlinx") {
-        name = "Kotlinx"
-    }
 }
 
 base {
@@ -46,9 +40,9 @@ minecraft {
 
 dependencies {
     // Core
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.15.2")
-    mappings(group = "net.fabricmc", name = "yarn", version = "1.15.2+build.1", classifier = "v2")
-    modCompile(group = "net.fabricmc", name = "fabric-loader", version = "0.7.5+build.178")
+    minecraft(group = "com.mojang", name = "minecraft", version = "20w13b")
+    mappings(group = "net.fabricmc", name = "yarn", version = "20w13b+build.9", classifier = "v2")
+    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.7.8+build.189")
 
     // fabric api/library
     modImplementation(group = "net.fabricmc", name = "fabric-language-kotlin", version = "1.3.61+build.2")
@@ -64,7 +58,7 @@ dependencies {
     include(group = "net.fabricmc.fabric-api", name = "fabric-commands-v0", version = fabricVersion)
     include(group = "net.fabricmc.fabric-api", name = "fabric-events-lifecycle-v0", version = fabricVersion)
     include(group = "one.oktw", name = "galaxy-proxy", version = proxyApiVersion)
-    include(group = "org.mongodb", name = "bson", version = "3.12.0")
+    include(group = "org.mongodb", name = "bson", version = "4.0.1")
 }
 
 tasks.getByName<ProcessResources>("processResources") {

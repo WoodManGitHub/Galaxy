@@ -21,8 +21,8 @@ package one.oktw.galaxy.player
 import net.fabricmc.fabric.api.event.server.ServerTickCallback
 import net.minecraft.block.*
 import net.minecraft.block.Blocks.*
-import net.minecraft.client.network.packet.BlockUpdateS2CPacket
-import net.minecraft.client.network.packet.EntityAnimationS2CPacket
+import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket
+import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.state.property.IntProperty
@@ -105,15 +105,13 @@ class Harvest {
     }
 
     private fun updateBlockAndInventory(player: ServerPlayerEntity, world: ServerWorld, blockPos: BlockPos) {
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos))
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(1, 0, 0)))
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(0, 0, 1)))
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(-1, 0, 0)))
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(0, 0, -1)))
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(0, 1, 0)))
-        player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(0, -1, 0)))
-        player.onContainerRegistered(player.container, player.container.stacks)
+        // Force update blocks
+        for (x in -1..1) for (y in -1..1) for (z in -1..1) {
+            player.networkHandler.sendPacket(BlockUpdateS2CPacket(world, blockPos.add(x, y, z)))
+        }
 
+        // Force update inventory
+        player.openHandledScreen(player.currentScreenHandler)
     }
 
     private fun isNextTo(world: ServerWorld, blockPos: BlockPos, block: Block): Boolean {

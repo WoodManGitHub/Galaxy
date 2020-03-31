@@ -20,12 +20,12 @@ package one.oktw.galaxy.command.commands
 
 import com.mojang.brigadier.CommandDispatcher
 import kotlinx.coroutines.*
-import net.minecraft.client.network.packet.TitleS2CPacket
+import net.minecraft.network.packet.s2c.play.TitleS2CPacket
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.LiteralText
 import net.minecraft.util.Formatting
-import net.minecraft.server.network.ServerPlayerEntity
 import one.oktw.galaxy.command.Command
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -51,7 +51,8 @@ class Home : Command {
 
         lock += source.player.uuid
 
-        if (source.player.spawnPosition == null) {
+        val spawnPos = source.player.spawnPointPosition
+        if (spawnPos == null) {
             player.sendMessage(LiteralText("找不到您的家").styled { style -> style.color = Formatting.RED })
         } else {
             GlobalScope.launch {
@@ -61,7 +62,7 @@ class Home : Command {
                     delay(TimeUnit.SECONDS.toMillis(1))
                 }
                 withContext(player.server.asCoroutineDispatcher()) {
-                    player.requestTeleport(source.player.spawnPosition.x.toDouble(),source.player.spawnPosition.y.toDouble(),source.player.spawnPosition.z.toDouble())
+                    player.requestTeleport(spawnPos.x.toDouble(), spawnPos.y.toDouble(), spawnPos.z.toDouble())
                 }
                 lock -= source.player.uuid
             }
