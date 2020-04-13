@@ -25,6 +25,7 @@ import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Formatting
+import one.oktw.galaxy.Main.Companion.main
 import one.oktw.galaxy.command.Command
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -58,7 +59,7 @@ class Spawn : Command {
                 delay(TimeUnit.SECONDS.toMillis(1))
             }
 
-            withContext(player.server.asCoroutineDispatcher()) {
+            withContext(main!!.server.asCoroutineDispatcher()) {
                 val spawnPos = player.serverWorld.spawnPos
                 player.stopRiding()
                 if (player.isSleeping) {
