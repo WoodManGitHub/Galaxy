@@ -39,13 +39,14 @@ class Harvest {
 
     @EventListener(true)
     fun onPlayerInteractBlock(event: PlayerInteractBlockEvent) {
-        if (event.player in justHarvested) event.cancel = true
+        val player = event.player
+        if (player in justHarvested) event.cancel = true
 
-        val world = event.player.serverWorld
+        val world = player.serverWorld
         val blockPos = event.packet.hitY.blockPos
         val blockState = world.getBlockState(blockPos)
 
-        if (event.packet.hand == Hand.MAIN_HAND && !event.player.isSneaking && isMature(world, blockPos, blockState)) {
+        if (event.packet.hand == Hand.MAIN_HAND && !player.isSneaking && isMature(world, blockPos, blockState)) {
             event.cancel = true
             val ageProperties = when (blockState.block) {
                 WHEAT, CARROTS, POTATOES -> CropBlock.AGE
@@ -54,13 +55,15 @@ class Harvest {
                 NETHER_WART -> NetherWartBlock.AGE
                 else -> IntProperty.of("AGE", 0, 1)
             }
-            event.player.swingHand(Hand.MAIN_HAND, true)
-            event.player.interactionManager.tryBreakBlock(blockPos)
+            player.swingHand(Hand.MAIN_HAND, true)
+            world.breakBlock(blockPos, false)
+            Block.dropStacks(blockState, world, blockPos, world.getBlockEntity(blockPos), player, player.mainHandStack)
+            player.interactionManager.tryBreakBlock(blockPos)
             if (blockState.block != PUMPKIN && blockState.block != MELON) {
                 world.setBlockState(blockPos, blockState.with(ageProperties, 0))
                 world.updateNeighbors(blockPos, blockState.block)
             }
-            justHarvested.add(event.player)
+            justHarvested.add(player)
         }
     }
 
