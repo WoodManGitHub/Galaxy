@@ -59,6 +59,7 @@ class BlockEvents {
     @Suppress("unused")
     @EventListener(true)
     fun onPlayerInteractBlock(event: PlayerInteractBlockEvent) {
+        println(event.packet.hand)
         if (eventLock.contains(event.packet) || mainHandUsedLock.contains(event.player)) return
         eventLock.add(event.packet)
 
