@@ -74,8 +74,8 @@ jobs:
         uses: azure/docker-login@v1
         with:
           login-server: registry.oktw.one
-          username: $USERNAME
-          password: $PASSWORD
+          username: env.USERNAME
+          password: env.PASSWORD
       - name: pull cache
         if: github.event_name == 'push'
         run: |
