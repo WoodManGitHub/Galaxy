@@ -54,6 +54,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY_IMAGE: registry.oktw.one/galaxy/galaxy
+      USERNAME: ${{ secrets.OKTW_REGISTRY_USERNAME }}
+      PASSWORD: ${{ secrets.OKTW_REGISTRY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -68,12 +70,12 @@ jobs:
           name: jar
           path: docker/mods/Galaxy.jar
       - name: login
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && $USERNAME != '' && $PASSWORD != ''
         uses: azure/docker-login@v1
         with:
           login-server: registry.oktw.one
-          username: ${{ secrets.OKTW_REGISTRY_USERNAME }}
-          password: ${{ secrets.OKTW_REGISTRY_PASSWORD }}
+          username: $USERNAME
+          password: $PASSWORD
       - name: pull cache
         if: github.event_name == 'push'
         run: |
