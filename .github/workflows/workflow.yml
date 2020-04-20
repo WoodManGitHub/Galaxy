@@ -70,7 +70,7 @@ jobs:
           name: jar
           path: docker/mods/Galaxy.jar
       - name: login
-        if: github.event_name == 'push' && $USERNAME
+        if: github.event_name == 'push' && env.USERNAME != '' && env.PASSWORD != ''
         uses: azure/docker-login@v1
         with:
           login-server: registry.oktw.one
